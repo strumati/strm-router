@@ -11,11 +11,6 @@ import (
 )
 
 // Routing map
-//var routes = map[string]string{
-//	"s3": "http://localhost:3901",
-//	"j2": "http://localhost:3902",
-//}
-
 var routes map[string]interface{}
 
 // Extract AWS service from Authorization header
