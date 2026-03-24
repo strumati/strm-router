@@ -1,18 +1,22 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 )
 
 // Routing map
-var routes = map[string]string{
-	"s3": "http://localhost:3901",
-	"j2": "http://localhost:3902",
-}
+//var routes = map[string]string{
+//	"s3": "http://localhost:3901",
+//	"j2": "http://localhost:3902",
+//}
+
+var routes map[string]interface{}
 
 // Extract AWS service from Authorization header
 func extractService(auth string) string {
@@ -72,7 +76,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	proxy := newProxy(target)
+	proxy := newProxy(target.(string))
 	if proxy == nil {
 		http.Error(w, "Proxy setup failed", http.StatusInternalServerError)
 		return
@@ -83,6 +87,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	raw, err := os.ReadFile("config.json")
+	if err != nil {
+		panic(err)
+	}
+
+	if err := json.Unmarshal(raw, &routes); err != nil {
+		panic(err)
+	}
+
 	http.HandleFunc("/", handler)
 
 	log.Println("Router running on :3900")
