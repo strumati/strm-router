@@ -13,7 +13,7 @@ import (
 // Routing map
 var routes map[string]interface{}
 
-// Extract AWS service from Authorization header
+// Extract Cloud service from Authorization header
 func extractService(auth string) string {
 
 	parts := strings.Split(auth, "Credential=")
