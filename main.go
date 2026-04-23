@@ -63,7 +63,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Authorization")
 
 	service := extractService(auth)
-	log.Println("Detected service:", service)
 
 	target, ok := routes[service]
 	if !ok {
